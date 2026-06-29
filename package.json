@@ -1,6 +1,6 @@
 {
   "name": "music-display",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A cross-platform now-playing widget that displays and controls system media (any app or website).",
   "main": "./out/main/index.js",
   "author": "MusicDisplay",
@@ -14,8 +14,8 @@
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "pack:mac": "npm run render:icon && electron-vite build && electron-builder --mac --dir",
-    "dist:mac": "npm run render:icon && electron-vite build && electron-builder --mac",
-    "dist:win": "npm run render:icon && electron-vite build && electron-builder --win"
+    "dist:mac": "npm run render:icon && electron-vite build && electron-builder --mac --publish never",
+    "dist:win": "npm run render:icon && electron-vite build && electron-builder --win --publish never"
   },
   "dependencies": {
     "electron-store": "^8.2.0"
