@@ -11,6 +11,10 @@ on:
       - 'v*'
   workflow_dispatch:
 
+# Required so the release step can create the Release and upload installers.
+permissions:
+  contents: write
+
 jobs:
   build:
     strategy:
