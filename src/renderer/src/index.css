@@ -1,0 +1,441 @@
+:root {
+  --bg-top: #232325;
+  --bg-bottom: #161617;
+  --text: #f5f5f7;
+  --text-dim: #9a9aa1;
+  --text-faint: #7c7c83;
+  --accent: #ffffff;
+  --track: rgba(255, 255, 255, 0.16);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  background: transparent;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* ---------- Widget shell ---------- */
+.widget {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  -webkit-app-region: drag;
+  background: linear-gradient(160deg, var(--bg-top), var(--bg-bottom));
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  padding: 16px 18px 12px;
+  display: flex;
+  flex-direction: column;
+  color: var(--text);
+  overflow: hidden;
+}
+
+.gear {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+  z-index: 4;
+}
+.gear:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- Main row: artwork + info ---------- */
+.main-row {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+}
+
+.artwork {
+  width: 116px;
+  height: 116px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0d0d0e;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+}
+.artwork img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.artwork-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44px;
+  color: rgba(255, 255, 255, 0.18);
+  background: linear-gradient(145deg, #2a2a2d, #1a1a1c);
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 2px;
+}
+
+.meta {
+  /* Keep the title from running under the gear button in the corner. */
+  padding-right: 30px;
+  min-width: 0;
+}
+.title {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+}
+.artist {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
+
+/* ---------- Marquee (scrolls long text) ---------- */
+.marquee {
+  overflow: hidden;
+  width: 100%;
+}
+.marquee-inner {
+  display: inline-block;
+  white-space: nowrap;
+  will-change: transform;
+}
+.marquee.scrolling .marquee-inner {
+  animation: marquee linear infinite;
+}
+@keyframes marquee {
+  0%,
+  12% {
+    transform: translateX(0);
+  }
+  47%,
+  53% {
+    transform: translateX(var(--shift));
+  }
+  88%,
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* ---------- Transport controls ---------- */
+.controls {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin: 6px 0 2px;
+}
+.transport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+.controls-side {
+  display: flex;
+  align-items: center;
+}
+.controls-side.right {
+  justify-content: flex-end;
+}
+
+/* Loop / repeat button */
+.ctrl.loop {
+  position: relative;
+  color: var(--text-dim);
+  padding: 7px;
+}
+.ctrl.loop:hover {
+  color: var(--text);
+}
+.ctrl.loop.active {
+  color: #34c759;
+}
+.ctrl.loop.active:hover {
+  color: #4cd964;
+}
+.loop-badge {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  font-size: 8px;
+  font-weight: 700;
+  line-height: 1;
+  background: #34c759;
+  color: #0d0d0e;
+  border-radius: 6px;
+  padding: 1px 3px;
+}
+.ctrl {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 6px;
+  transition:
+    transform 0.12s ease,
+    opacity 0.15s ease,
+    background 0.15s ease;
+}
+.ctrl:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.ctrl:active {
+  transform: scale(0.9);
+}
+.ctrl.play {
+  width: 46px;
+  height: 46px;
+}
+.ctrl:disabled {
+  opacity: 0.3;
+  cursor: default;
+  background: transparent;
+}
+
+/* ---------- Progress ---------- */
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.time {
+  font-size: 11.5px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+  min-width: 38px;
+}
+.time:last-child {
+  text-align: right;
+}
+.progress {
+  flex: 1;
+  padding: 8px 0;
+  cursor: pointer;
+}
+.progress-track {
+  position: relative;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--track);
+}
+.progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--accent);
+}
+.progress-thumb {
+  position: absolute;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.progress:hover .progress-thumb {
+  opacity: 1;
+}
+
+/* ---------- Volume ---------- */
+.volume-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+  /* Right padding keeps the slider clear of the resize grip in the corner. */
+  padding: 2px 18px 2px 0;
+}
+.vol-icon {
+  color: var(--text-dim);
+  display: flex;
+  width: 20px;
+  justify-content: center;
+}
+.volume {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(
+    to right,
+    var(--accent) 0%,
+    var(--accent) var(--vol, 50%),
+    var(--track) var(--vol, 50%),
+    var(--track) 100%
+  );
+  cursor: pointer;
+}
+.volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+/* ---------- Settings overlay ---------- */
+.settings-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: linear-gradient(160deg, #242426, #18181a);
+  padding: 13px 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 10;
+  animation: fade 0.16s ease;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.settings-header .gear {
+  position: static;
+}
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--text);
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+
+/* ---------- Toggle switch ---------- */
+.toggle {
+  width: 42px;
+  height: 24px;
+  border-radius: 14px;
+  border: none;
+  background: rgba(255, 255, 255, 0.16);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.18s ease;
+  flex-shrink: 0;
+}
+.toggle.on {
+  background: #34c759;
+}
+.toggle .knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.18s ease;
+}
+.toggle.on .knob {
+  transform: translateX(18px);
+}
+
+/* Drag-to-resize grip (bottom-right corner) */
+.resize-handle {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  color: var(--text-faint);
+  opacity: 0.5;
+  cursor: nwse-resize;
+  z-index: 5;
+  transition: opacity 0.15s ease;
+}
+.resize-handle:hover {
+  opacity: 1;
+}
+
+.quit-btn {
+  margin-top: 8px;
+  align-self: flex-start;
+  background: rgba(255, 59, 48, 0.14);
+  color: #ff6b60;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.quit-btn:hover {
+  background: rgba(255, 59, 48, 0.24);
+}

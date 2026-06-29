@@ -1,0 +1,37 @@
+{
+  "name": "music-display",
+  "version": "1.0.0",
+  "description": "A cross-platform now-playing widget that displays and controls system media (any app or website).",
+  "main": "./out/main/index.js",
+  "author": "MusicDisplay",
+  "license": "MIT",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "start": "electron-vite preview",
+    "render:icon": "node scripts/render-icon.mjs",
+    "build": "electron-vite build",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "pack:mac": "npm run render:icon && electron-vite build && electron-builder --mac --dir",
+    "dist:mac": "npm run render:icon && electron-vite build && electron-builder --mac",
+    "dist:win": "npm run render:icon && electron-vite build && electron-builder --win"
+  },
+  "dependencies": {
+    "electron-store": "^8.2.0"
+  },
+  "devDependencies": {
+    "@electron-toolkit/tsconfig": "^1.0.1",
+    "@types/node": "^22.10.5",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^34.0.0",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.7.3",
+    "vite": "^5.4.11"
+  }
+}
