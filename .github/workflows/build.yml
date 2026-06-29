@@ -40,9 +40,14 @@ jobs:
       - name: Build installer (${{ matrix.platform }})
         run: npm run dist:${{ matrix.platform }}
         env:
-          # Skip code signing in CI (unsigned build). Add certificates here later
-          # if you want signed/notarized output.
-          CSC_IDENTITY_AUTO_DISCOVERY: false
+          # macOS Developer ID signing + notarization. Only fed to the mac job;
+          # blanked on Windows so it doesn't try to use a mac cert. If these
+          # secrets are unset, the mac build falls back to ad-hoc signing.
+          CSC_LINK: ${{ matrix.platform == 'mac' && secrets.CSC_LINK || '' }}
+          CSC_KEY_PASSWORD: ${{ matrix.platform == 'mac' && secrets.CSC_KEY_PASSWORD || '' }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
 
       - name: Upload installers
         uses: actions/upload-artifact@v4
