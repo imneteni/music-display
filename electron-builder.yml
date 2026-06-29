@@ -1,5 +1,6 @@
 appId: com.musicdisplay.app
 productName: Music Display
+afterPack: ./after-pack.cjs
 directories:
   buildResources: build
 files:

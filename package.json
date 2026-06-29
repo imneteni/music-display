@@ -1,6 +1,6 @@
 {
   "name": "music-display",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A cross-platform now-playing widget that displays and controls system media (any app or website).",
   "main": "./out/main/index.js",
   "author": "MusicDisplay",
